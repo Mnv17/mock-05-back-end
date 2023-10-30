@@ -3,7 +3,8 @@ const express = require("express");
 const cors = require("cors")
 const { connectDB } = require("./config/db")
 const { userRouter } = require("./routes/user.route")
-const { doctorRouter } = require("./routes/doctor.route")
+const { doctorRouter } = require("./routes/doctor.route");
+const { connection } = require("./models/user.model");
 
 const app = express();
 
@@ -17,7 +18,11 @@ app.get("/", (req, res) => {
 })
 
 let PORT = process.env.PORT || 8000;
-app.listen(PORT, () => {
-    connectDB()
-    console.log(`Server running on port ${PORT}`);
-});
+app.listen(PORT, async () => {
+    try {
+      await connection  
+      console.log("Connected to DB");
+    } catch (error) {
+      console.log("Cannot connect to Database");
+    }
+  });
